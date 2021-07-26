@@ -1,0 +1,117 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <div id="paypal-button"></div>
+
+        <!-- Load PayPal's checkout.js Library. -->
+        <script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
+
+        <!-- Load the client component. -->
+        <script src="https://js.braintreegateway.com/web/3.55.0/js/client.min.js"></script>
+
+        <!-- Load the PayPal Checkout component. -->
+        <script src="https://js.braintreegateway.com/web/3.55.0/js/paypal-checkout.min.js"></script>
+
+        <!--
+        Collecting device data from your customers is required when initiating non-recurring transactions from Vault records.
+        Collecting and passing this data with transactions will help reduce decline rates.
+        -->
+        <script src="https://js.braintreegateway.com/web/3.55.0/js/data-collector.min.js"></script>
+
+        <script>
+            var CLIENT_AUTHORIZATION = 'production_6mh3b6bc_sv29pg5wvyfzn45m';
+            var MERCHANT_ACCOUNT_ID = 'savagexesEUR';
+
+            // Create a client.
+            braintree.client.create({
+                authorization: CLIENT_AUTHORIZATION
+            }, function (clientErr, clientInstance) {
+            
+                // Stop if there was a problem creating the client.
+                // This could happen if there is a network error or if the authorization
+                // is invalid.
+                if (clientErr) {
+                console.error('Error creating client:', clientErr);
+                return;
+                }
+
+                braintree.dataCollector.create({
+                    client: clientInstance,
+                    paypal: true
+                }, function (err, dataCollectorInstance) {
+                    if (err) {
+                    // Handle error
+                    return;
+                    }
+                    // At this point, you should access the dataCollectorInstance.deviceData value and provide it
+                    // to your server, e.g. by injecting it into your form as a hidden input.
+                    myDeviceData = dataCollectorInstance.deviceData;
+                });
+            
+                // Create a PayPal Checkout component.
+                braintree.paypalCheckout.create({
+                client: clientInstance,
+                merchantAccountId: MERCHANT_ACCOUNT_ID
+                }, function (paypalCheckoutErr, paypalCheckoutInstance) {
+            
+                // Stop if there was a problem creating PayPal Checkout.
+                // This could happen if there was a network error or if it's incorrectly
+                // configured.
+                if (paypalCheckoutErr) {
+                    console.error('Error creating PayPal Checkout:', paypalCheckoutErr);
+                    return;
+                }
+            
+                // Set up PayPal with the checkout.js libraryurl
+                paypal.Button.render({
+                    env: 'production', // or 'sandbox'
+            
+                    payment: function () {
+                    return paypalCheckoutInstance.createPayment({
+                        flow: 'checkout',
+                        ntent: 'authorize',
+                        amount: 16.00, // Required
+                    //orderId: uuidv4(),
+                        currency: 'USD', // Required
+                        billingAgreementDescription: 'Your agreement description',
+                        enableShippingAddress: true,
+                        shippingAddressEditable: false
+                    });
+                    },
+            
+                    onAuthorize: function (data, actions) {
+                    return paypalCheckoutInstance.tokenizePayment(data, function (err, payload) {
+                        console.log(payload);
+                        console.log(payload.details);
+                        console.log(payload.details.shippingAddress);
+                        
+                        
+                        const payerId = payload.details.payerId;
+                        const nonce = payload.nonce;
+                        // base64encode and stringify before passing as param
+                        const shippingAddress = btoa(JSON.stringify(payload.details.shippingAddress));
+
+                        window.location.replace(`braintree.cfm?nonce=${nonce}&payerId=${payerId}&shippingAddress=${shippingAddress}`);
+                    });
+                    },
+            
+                    onCancel: function (data) {
+                    console.log('checkout.js payment cancelled', JSON.stringify(data, 0, 2));
+                    },
+            
+                    onError: function (err) {
+                    console.error('checkout.js error', err);
+                    }
+                }, '#paypal-button').then(function () {
+                    // The PayPal button will be rendered in an html element with the id
+                    // `paypal-button`. This function will be called when the PayPal button
+                    // is set up and ready to be used.
+                });
+            
+                });
+            
+            });
+        </script>
+    </body>
+</html>

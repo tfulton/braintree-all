@@ -1,0 +1,244 @@
+<html>
+
+<head>
+    <title>Braintree Client SDK Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+    <script src="https://js.braintreegateway.com/web/3.66.0/js/client.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.66.0/js/hosted-fields.min.js"></script>
+    <style>
+        body {
+            padding: 10px;
+            font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+        }
+
+        a {
+            color: #00B7FF;
+        }
+
+        input[type="text"],
+        .hosted-field {
+            border: 1px solid #3A3A3A;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            height: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- BEGIN: MAIN CONTENT -->
+    <div class="ui container" id="mainSection">
+        <p></p>
+        <h3 class="header">BT Hosted Fields w/JSv3</h3>
+        <div class="ui top attached tabular menu">
+            <a class="item active" data-tab="first" id="stepOne">Begin</a>
+            <a class="item" data-tab="second" id="stepTwo">Review</a>
+        </div>
+
+        <div class="ui bottom attached tab segment active">
+
+            <div class="ui negative message hidden" id="errorMessage">
+                <i class="close icon"></i>
+                <div class="header" id="errorMessageHeader"></div>
+                <p id="errorMessageContent"></p>
+            </div>
+
+            <div class="ui message" id="infoMessage">
+                <div class="header"></div>
+                <p></p>
+            </div>
+
+            <!-- PAYMENT FORM -->
+            <div class="ui container" id="paymentForm">
+                <form id="checkout" class="ui form">
+                    <div class="seven wide field">
+                        <label>Name</label>
+                        <input data-braintree-name="cardholder_name" class="hosted-field" value="John Smith">
+                    </div>
+                    <div class="fields">
+                        <div class="seven wide field">
+                            <label>CC Number</label>
+                            <div id="number" class="hosted-field"></div>
+                        </div>
+                        <div class="three wide field">
+                            <label>CVV</label>
+                            <div id="cvv" class="hosted-field"></div>
+                        </div>
+                        <div class="six wide field">
+                            <label>Expiration</label>
+                            <div class="two fields">
+                                <div class="field">
+                                    <div id="expiration_month" class="hosted-field"></div>
+                                </div>
+                                <div class="field">
+                                    <div id="expiration-year" class="hosted-field"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="seven wide field">
+                        <label>ZIP Code</label>
+                        <div id="postal_code" class="hosted-field"></div>
+                    </div>
+                    <div class="seven wide field">
+                        <button class="ui primary button" id="submit-button">Pay</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- RESPONSE PAYLOAD WE CAN PUT HERE -->
+            <div class="ui divider"></div>
+            <div class="title">
+                Response
+            </div>
+            <div class="ui segment" id="responsePayload"></div>
+        </div>
+
+    </div>
+    <!-- END: MAIN CONTENT -->
+
+    <script>
+        //////////////////////////////////////////////////////////////////////
+        // BULK OF OUR INTEGTRATION WORK IS IN THIS SECTION
+        //////////////////////////////////////////////////////////////////////
+        const uri = "/token"
+        $.ajax({
+            url: uri,
+            type: "GET",
+            crossDomain: true,
+            async: false,
+            success: function (result) {
+                console.log("result: ", result);
+                braintree.client
+                    .create({
+                        authorization: result // using the client token received in the ajax call
+                    })
+                    .then(function (clientInstance) {
+                        // our Braintree client is ready for action
+                        console.log("Braintree client available and ready.");
+                        const options = {
+                            client: clientInstance,
+                            styles: {
+                                input: {
+                                    "font-size": "14px"
+                                },
+                                "input.invalid": {
+                                    color: "red"
+                                },
+                                "input.valid": {
+                                    color: "green"
+                                }
+                            },
+                            fields: {
+                                number: {
+                                    selector: "#number",
+                                    placeholder: "4111 1111 1111 1111"
+                                },
+                                cvv: {
+                                    selector: "#cvv",
+                                    placeholder: "100"
+                                },
+                                expirationMonth: {
+                                    selector: "#expiration_month",
+                                    placeholder: "10"
+                                },
+                                expirationYear: {
+                                    selector: "#expiration-year",
+                                    placeholder: "2020"
+                                },
+                                postalCode: {
+                                    selector: "#postal_code",
+                                    placeholder: "94109"
+                                }
+                            }
+                        };
+                        return braintree.hostedFields.create(options);
+                    })
+                    .then(function (hostedFieldsInstance) {
+                        console.log("We have a hosted field instance.");
+
+                        $("#submit-button").click(function (event) {
+                            console.log("Let's submit this thing!");
+                            event.preventDefault();
+
+                            // this is where we handle the payment info, tokenize and get the nonce
+                            hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
+                                if (tokenizeErr) {
+                                    console.error(tokenizeErr);
+                                    presentError(null, tokenizeErr, false);
+                                    return;
+                                }
+
+                                // If this was a real integration, this is where you would
+                                // send the nonce to your server.
+                                console.log("Got a nonce: " + payload.nonce);
+                                console.log("Payload: ", payload);
+
+                                // hide form and update the tabs
+                                $("#paymentForm").hide();
+                                $("#stepOne").removeClass("active");
+                                $("#stepTwo").addClass("active");
+
+                                // show a confirmation to the user
+                                presentInfoMessage(
+                                    "Great!",
+                                    "Sucessfully tokenized the payment data and retreived the payload, including nonce."
+                                );
+
+                                $("#responsePayload").html(
+                                    "<pre>" + JSON.stringify(payload, null, 1) + "</pre>"
+                                );
+                            });
+                        });
+                    })
+                    .catch(function (hostedFieldsErr) {
+                        console.error("Hosted fields related error: ", hostedFieldsErr);
+                        return;
+                    })
+                    .catch(function (clientErr) {
+                        console.error("Error creating client:", clientErr);
+                        return;
+                    });
+            },
+            error: function (error) {
+                console.log("Error in ajax call: ", error);
+            }
+        });
+
+        //////////////////////////////////////////////////////////////////////
+        // MISC PAGE PRESENTATION CODE
+        //////////////////////////////////////////////////////////////////////
+        // 1) set the info message and present the payload for the user to see if they choose
+        presentInfoMessage(
+            "Begin",
+            "Click a button and the JavaScript SDK initiates a payment."
+        );
+
+        //////////////////////////////////////////////////////////////////////
+        // SOME UTILITY FUNCTIONS TO HELP OUR PAGE PRESENTATION
+        //////////////////////////////////////////////////////////////////////
+        function presentError(header = "General Error", error, debug = false) {
+            $("#errorMessageHeader").html(header);
+            $("#errorMessageContent").html(error.message);
+            if (debug) {
+                $("#errorStack").html(error.stack);
+            }
+            $("#errorMessage").show();
+        }
+
+        function presentInfoMessage(header, message) {
+            $("#infoMessage .header").html(header);
+            $("#infoMessage p").html(message);
+        }
+
+        $(".message .close").on("click", function () {
+            $("#errorMessage").hide();
+        });
+
+    </script>
+</body>
+
+</html>

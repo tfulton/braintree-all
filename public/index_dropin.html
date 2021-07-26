@@ -1,0 +1,121 @@
+<html>
+
+<head>
+    <title>Braintree Client SDK Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+    <script src="https://js.braintreegateway.com/web/dropin/1.24.0/js/dropin.min.js"></script>
+</head>
+
+<body>
+    <p></p>
+    <div class="ui raised container grid">
+
+        <div class="single column row">
+            <div class="column">
+                <h1 class="ui header">Braintree Drop-In SDK Test</h2>
+            </div>
+        </div>
+
+        <div class="single column row">
+            <div class="column">
+                <!-- INITIAL INPUT FORM -->
+                <div class="ui form" id="paymentForm">
+                    <div class="two wide field">
+                        <label id="label">Amount</label>
+                        <input id="amount" type="text" placeholder="$10.01" disabled />
+                    </div>
+
+                    <div id="dropin-container"></div>
+                    <div id="buttons">
+                        <button class="ui primary button" id="submitButton">
+                            Save
+                        </button>
+                        <button class="ui button" id="cancelButton">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="single column row">
+            <div class="column">
+                <!-- RESULTS REVIEW FORM -->
+                <div class="ui segment" id="resultsForm" hidden>
+                    <div class="ui message">
+                        <i class="close icon"></i>
+                        <div class="header">
+                            Awsome, we got a response from the checkout!
+                        </div>
+                        <p id="response">RESPONSE CONTENTS HERE</p>
+                    </div>
+                    <div id="buttons">
+                        <button class="ui button" id="resetButton">
+                            Start Again
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        $.ajax({
+            url: '/token/LOB-USD', // pulling a client-token from a local endpoint.  "client token" should be used on demand, not designed for cache or re-use.
+            type: "GET",
+            crossDomain: false,
+            async: false,
+            success: function (result) {
+                console.log("result: ", result);
+                braintree.dropin.create({
+
+                    authorization: 'sandbox_bn4dn4nd_d3dk6npsbpz7t3s8',
+                    container: '#dropin-container',
+                    paypal: {
+                        // flow: 'vault',
+                        flow: 'checkout',
+                        amount: 10.01,
+                        currency: 'USD',
+                        enableShippingAddress: true
+                    },
+                    venmo: {}
+                }, function (createErr, instance) {
+
+                    $("#submitButton").click(function () {
+                        instance.requestPaymentMethod(function (requestPaymentMethodErr, payload) {
+
+                            if (requestPaymentMethodErr) {
+                                $("#paymentForm").hide();
+                                $("#resultsForm").show();
+                                console.log("requestPaymentMethodErr: ", requestPaymentMethodErr);
+                                $("#response").html("<pre>" + JSON.stringify(requestPaymentMethodErr, null, 1) + "</pre>")
+                                return
+                            }
+                            else {
+                                $("#paymentForm").hide();
+                                $("#resultsForm").show();
+                                console.log("payload: ", payload);
+                                $("#response").html("<pre>" + JSON.stringify(payload, null, 1) + "</pre>")
+                            }
+
+                        });
+                    })
+                });
+            }
+        });
+
+        $("#home, #cancelButton, #resetButton").click(function () {
+            /* function goes in here */
+            location.reload()
+        });
+
+    </script>
+</body>
+
+</html>

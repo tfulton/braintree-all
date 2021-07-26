@@ -1,0 +1,209 @@
+<html>
+
+<head>
+    <title>Braintree Client SDK Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+    <script src="https://js.braintreegateway.com/web/3.55.0/js/client.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.55.0/js/local-payment.min.js"></script>
+
+</head>
+
+<body>
+    <!-- BEGIN: MAIN CONTENT -->
+    <div class="ui container" id="mainSection">
+        <p></p>
+        <h3 class="header">BT LPM - iDEAL</h3>
+        <div class="ui top attached tabular menu">
+            <a class="item active" data-tab="first" id="stepOne">Begin</a>
+            <a class="item" data-tab="second" id="stepTwo">Review</a>
+        </div>
+
+        <div class="ui bottom attached tab segment active">
+
+            <div class="ui negative message hidden" id="errorMessage">
+                <i class="close icon"></i>
+                <div class="header"></div>
+                <p></p>
+            </div>
+
+            <div class="ui message" id="infoMessage">
+                <div class="header"></div>
+                <p></p>
+            </div>
+
+            <!-- PAYMENT FORM -->
+            <div class="ui container" id="paymentForm">
+                <button class="ui primary basic button" id="ideal-button" data-type="ideal">
+                    Pay with iDEAL
+                </button>
+                &nbsp;
+                <button class="ui positive basic button" id="ideal-button" data-type="giropay">
+                    Pay with Giropay
+                </button>
+            </div>
+
+            <!-- RESPONSE PAYLOAD WE CAN PUT HERE -->
+            <div class="ui divider"></div>
+            <div class="title">
+                Response
+            </div>
+            <div class="ui segment" id="responsePayload"></div>
+        </div>
+
+    </div>
+    <!-- END: MAIN CONTENT -->
+
+    <script>
+        //////////////////////////////////////////////////////////////////////
+        // BULK OF OUR INTEGTRATION WORK IS IN THIS SECTION
+        //////////////////////////////////////////////////////////////////////
+        const merchantId = "LOB-EUR";
+        const uri = `/token/${merchantId}`;
+        $.ajax({
+            url: uri,
+            type: "GET",
+            crossDomain: true,
+            async: false,
+            success: function (result) {
+                console.log("result: ", result);
+                braintree.client
+                    .create({
+                        authorization: result // lob-eur associated token
+                    })
+                    .then(function (clientInstance) {
+                        // our Braintree client is ready for action
+                        console.log("Braintree client available and ready.");
+                        // Create a local payment component.
+                        return braintree.localPayment.create({
+                            client: clientInstance,
+                            merchantAccountId: merchantId
+                        });
+                    })
+                    .then(function (localPaymentInstance) {
+                        $(".button").click(function (event) {
+                            event.preventDefault();
+
+                            const type = $(this).data("type");
+                            console.log("payment type: ", type);
+
+                            // we will need this later
+                            let paymentId = null;
+
+                            localPaymentInstance
+                                .startPayment({
+                                    paymentType: type,
+                                    amount: "5.00",
+                                    fallback: {
+                                        // see Fallback section for details on these params
+                                        url: "https://support.google.com/webmasters/answer/93641?hl=en",
+                                        buttonText: "Complete Payment" // we won't be using this
+                                    },
+                                    currencyCode: 'EUR',
+                                    shippingAddressRequired: false,
+                                    email: 'joe@getbraintree.com',
+                                    phone: '+31202402400',
+                                    givenName: 'Joe',
+                                    surname: 'Doe',
+                                    address: {
+                                        countryCode: 'NL'
+                                    },
+                                    onPaymentStart: function (data, start) {
+                                        // NOTE: It is critical to store data.paymentId on your server
+                                        //       so it can be mapped to a webhook sent by Braintree once the
+                                        //       buyer authorizes their payment.
+                                        console.log("data: ", data);
+                                        paymentId = data.paymentId;
+
+                                        // Call start to initiate the popup
+                                        start();
+                                    }
+                                })
+                                .then(function (payload) {
+                                    // If this was a real integration, this is where you would
+                                    // send the nonce to your server.
+                                    console.log("Got a nonce: " + payload.nonce);
+                                    console.log("Payload: ", payload);
+
+                                    // hide form and update the tabs - not really needed but we like a good UI
+                                    $("#paymentForm").hide();
+                                    $("#stepOne").removeClass("active");
+                                    $("#stepTwo").addClass("active");
+
+                                    // present some UI
+                                    presentInfoMessage(
+                                        "Great!",
+                                        "Sucessfully tokenized the payment data and retreived the payload, including nonce."
+                                    );
+
+                                    $("#responsePayload").html(
+                                        "paymentId: " + paymentId +
+                                        "<p/>tokeniation payload:" +
+                                        "<pre>" + JSON.stringify(payload, null, 1) + "</pre>"
+                                    );
+                                })
+                                .catch(function (err) {
+                                    // NOTE:  want to handle error here ... as the payment may be coming out of the account anyhow.
+                                    // we are going to want to utilize the webhooks to ensure funds are returned or otherwise
+                                    // handled.
+
+                                    // present some UI for error
+                                    console.error(err);
+                                    presentError(err.code, err, true);
+                                    return;
+                                });
+                        });
+                    })
+                    .catch(function (clientErr) {
+                        console.error("Error creating client:", clientErr);
+                        return;
+                    });
+            }
+        });
+
+        //////////////////////////////////////////////////////////////////////
+        // MISC PAGE PRESENTATION CODE
+        //////////////////////////////////////////////////////////////////////
+        // 1) set the info message and present the payload for the user to see if they choose
+        presentInfoMessage(
+            "Begin",
+            "Click a button and the JavaScript SDK initiates a payment."
+        );
+
+        //////////////////////////////////////////////////////////////////////
+        // SOME UTILITY FUNCTIONS TO HELP OUR PAGE PRESENTATION
+        //////////////////////////////////////////////////////////////////////
+        function presentPayload(info) {
+            $("#requestType").html(info.type);
+            $("#requestPayload").html(
+                "<pre>" + JSON.stringify(info.request, null, 1) + "</pre>"
+            );
+            $("#responsePayload").html(
+                "<pre>" + JSON.stringify(info.response, null, 1) + "</pre>"
+            );
+            return;
+        }
+
+        function presentError(header = "General Error", error, debug = false) {
+            $("#errorMessage .header").html(header);
+            $("#errorMessage p").html(JSON.stringify(error, null, 4));
+            $("#errorMessage").show();
+        }
+
+        function presentInfoMessage(header, message) {
+            $("#infoMessage .header").html(header);
+            $("#infoMessage p").html(message);
+        }
+
+        $('.message .close')
+            .on('click', function () {
+                $("#errorMessage").hide();
+            })
+            ;
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,195 @@
+<html>
+
+<head>
+    <title>Braintree Client SDK Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+    <script src="https://pay.google.com/gp/p/js/pay.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.60.0/js/client.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.60.0/js/google-payment.min.js"></script>
+</head>
+
+<body>
+    <!-- BEGIN: MAIN CONTENT -->
+    <div class="ui container" id="mainSection">
+        <p></p>
+        <h3 class="header">Braintree JSv3 - Checkout.js</h3>
+        <div class="ui top attached tabular menu">
+            <a class="item active" data-tab="first" id="stepOne">Begin</a>
+            <a class="item" data-tab="second" id="stepTwo">Review</a>
+        </div>
+
+        <div class="ui bottom attached tab segment active">
+
+            <div class="ui negative message hidden" id="errorMessage">
+                <i class="close icon"></i>
+                <div class="header" id="errorMessageHeader"></div>
+                <p id="errorMessageContent"></p>
+            </div>
+
+            <div class="ui message" id="infoMessage">
+                <div class="header"></div>
+                <p></p>
+            </div>
+
+            <!-- PAYMENT FORM -->
+            <div class="ui container" id="paymentForm">
+                <button class="ui primary button" id="google-pay-button">
+                    Pay with Google
+                </button>
+                <button class="ui button">
+                    Discard
+                </button>
+            </div>
+
+            <!-- RESPONSE PAYLOAD WE CAN PUT HERE -->
+            <div class="ui divider"></div>
+            <div class="title">
+                Response
+            </div>
+            <div class="ui segment" id="responsePayload"></div>
+        </div>
+
+    </div>
+    <!-- END: MAIN CONTENT -->
+    <script>
+
+        //////////////////////////////////////////////////////////////////////
+        // BULK OF OUR INTEGTRATION WORK IS IN THIS SECTION
+        //////////////////////////////////////////////////////////////////////
+
+        // Make sure to have https://pay.google.com/gp/p/js/pay.js loaded on your page
+
+        // You will need a button element on your page styled according to Google's brand guidelines
+        // https://developers.google.com/pay/api/web/guides/brand-guidelines
+        var button = document.querySelector('#google-pay-button');
+        var paymentsClient = new google.payments.api.PaymentsClient({
+            environment: 'TEST' // Or 'PRODUCTION'
+        });
+
+        braintree.client.create({
+            authorization: 'sandbox_bn4dn4nd_d3dk6npsbpz7t3s8'
+        }, function (clientErr, clientInstance) {
+            braintree.googlePayment.create({
+                client: clientInstance,
+                googlePayVersion: 2,
+                googleMerchantId: 'merchant-id-from-google' // Optional in sandbox; if set in sandbox, this value must be a valid production Google Merchant ID
+            }, function (googlePaymentErr, googlePaymentInstance) {
+                paymentsClient.isReadyToPay({
+                    // see https://developers.google.com/pay/api/web/reference/object#IsReadyToPayRequest
+                    apiVersion: 2,
+                    apiVersionMinor: 0,
+                    allowedPaymentMethods: googlePaymentInstance.createPaymentDataRequest().allowedPaymentMethods,
+                    existingPaymentMethodRequired: true // Optional
+                }).then(function (response) {
+                    if (response.result) {
+                        button.addEventListener('click', function (event) {
+                            event.preventDefault();
+
+                            var paymentDataRequest = googlePaymentInstance.createPaymentDataRequest({
+                                transactionInfo: {
+                                    currencyCode: 'USD',
+                                    totalPriceStatus: 'FINAL',
+                                    totalPrice: '100.00' // Your amount
+                                }
+                            });
+
+                            // We recommend collecting billing address information, at minimum
+                            // billing postal code, and passing that billing postal code with all
+                            // Google Pay card transactions as a best practice.
+                            // See all available options at https://developers.google.com/pay/api/web/reference/object
+                            var cardPaymentMethod = paymentDataRequest.allowedPaymentMethods[0];
+                            cardPaymentMethod.parameters.billingAddressRequired = true;
+                            cardPaymentMethod.parameters.billingAddressParameters = {
+                                format: 'FULL',
+                                phoneNumberRequired: true
+                            };
+
+                            paymentsClient.loadPaymentData(paymentDataRequest).then(function (paymentData) {
+                                googlePaymentInstance.parseResponse(paymentData, function (err, result) {
+                                    if (err) {
+                                        // Handle parsing error
+                                    }
+                                    console.log("loadPaymentData Response:", paymentData);
+                                    console.log("parseResponse Response:", result); 
+                                    
+                                    // hide form and update the tabs
+                                    $("#paymentForm").hide();
+                                    $("#stepOne").removeClass("active");
+                                    $("#stepTwo").addClass("active");
+
+                                    // show a confirmation to the user
+                                    presentInfoMessage(
+                                        "Great!",
+                                        "Sucessfully tokenized the payment data and retreived the payload, including nonce."
+                                    );
+
+                                    $("#responsePayload").html(
+                                        "<pre>" + JSON.stringify(result, null, 1) + "</pre>"
+                                    );
+                                });
+                            }).catch(function (err) {
+                                // Handle errors
+                            });
+                        });
+                    }
+                }).catch(function (err) {
+                    // Handle errors
+                });
+            });
+
+            // Set up other Braintree components
+        });
+
+
+        //////////////////////////////////////////////////////////////////////
+        // MISC PAGE PRESENTATION CODE
+        //////////////////////////////////////////////////////////////////////
+        // 1) set the info message and present the payload for the user to see if they choose
+        presentInfoMessage(
+            "Begin",
+            "Click a button and the JavaScript SDK initiates a payment."
+        );
+
+        //////////////////////////////////////////////////////////////////////
+        // SOME UTILITY FUNCTIONS TO HELP OUR PAGE PRESENTATION
+        //////////////////////////////////////////////////////////////////////
+        function presentPayload(info) {
+            $("#requestType").html(info.type);
+            $("#requestPayload").html(
+                "<pre>" + JSON.stringify(info.request, null, 1) + "</pre>"
+            );
+            $("#responsePayload").html(
+                "<pre>" + JSON.stringify(info.response, null, 1) + "</pre>"
+            );
+            return;
+        }
+
+        function presentError(header = "General Error", error, debug = false) {
+            $("#errorMessageHeader").html(header);
+            $("#errorMessageContent").html(error.message);
+            if (debug) {
+                $("#errorStack").html(error.stack);
+            }
+            $("#errorMessage").show();
+        }
+
+        function presentInfoMessage(header, message) {
+            $("#infoMessage .header").html(header);
+            $("#infoMessage p").html(message);
+        }
+
+        const uuidv4 = function () {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+    </script>
+</body>
+
+</html>

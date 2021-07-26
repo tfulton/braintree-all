@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--
+            BASE:
+                "/" for  for dev
+                "/" for prod
+        -->
+    <!-- <base href=<%= htmlWebpackPlugin.options.base %>> -->
+    <!-- Set Metadata and Root Directory -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, viewport-fit=cover">
+    <link rel="stylesheet" type="text/css" href="https://api.addressy.com/css/address-3.70.css" />
+    <!-- Set SEO Title and Description -->
+    <title>Venmo test</title>
+    <meta name="description" content="venmo test">
+    <script src="https://www.paypalobjects.com/api/checkout.js" data-version-4 log-level="warn"></script>
+    <script src="https://js.braintreegateway.com/web/3.56.0/js/client.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.56.0/js/venmo.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.56.0/js/data-collector.min.js"></script>
+    <style>
+        /* #venmo_container {
+            width: 200px;
+            height: 100px;
+            border: 1px solid #ccc;
+        } */
+    </style>
+</head>
+
+<body>
+    <div id="main-body">
+        <h1>Venmo Test</h1>
+        <div id="venmo_container" display="none">
+            <button>
+                <img src="assets/blue_venmo_button_280x48.svg"/>
+            </button>
+        </div>
+        <script>
+            var venmoButton = document.getElementById('venmo_container');
+            // Create a client.
+            braintree.client.create({
+                authorization: 'sandbox_mf96n3g5_f6swr6z3wpqndzr8',
+                //profileId: '1953896702662410263'
+            }, function (clientErr, clientInstance) {
+                // Stop if there was a problem creating the client.
+                // This could happen if there is a network error or if the authorization
+                // is invalid.
+                if (clientErr) {
+                    console.error('Error creating client:', clientErr);
+                    return;
+                }
+                braintree.dataCollector.create({
+                    client: clientInstance,
+                    paypal: true
+                }, function (dataCollectorErr, dataCollectorInstance) {
+                    if (dataCollectorErr) {
+                        // Handle error in creation of data collector.
+                        return;
+                    }
+                    // At this point, you should access the deviceData value and provide it
+                    // to your server, e.g. by injecting it into your form as a hidden input.
+                    console.log('Got device data:', dataCollectorInstance.deviceData);
+                });
+                braintree.venmo.create({
+                    client: clientInstance,
+                    //profileId: "1953896702662410263",
+                    // Add allowNewBrowserTab: false if your checkout page does not support
+                    // relaunching in a new tab when returning from the Venmo app. This can
+                    // be omitted otherwise.
+                    allowNewBrowserTab: false
+                }, function (venmoErr, venmoInstance) {
+                    if (venmoErr) {
+                        console.error('Error creating Venmo:', venmoErr);
+                        return;
+                    }
+                    // Verify browser support before proceeding.
+                    if (!venmoInstance.isBrowserSupported()) {
+                        console.log('Browser does not support Venmo');
+                        return;
+                    }
+                    displayVenmoButton(venmoInstance);
+                    // Check if tokenization results already exist. This occurs when your
+                    // checkout page is relaunched in a new tab. This step can be omitted
+                    // if allowNewBrowserTab is false.
+                    if (venmoInstance.hasTokenizationResult()) {
+                        venmoInstance.tokenize(function (tokenizeErr, payload) {
+                            if (err) {
+                                handleVenmoError(tokenizeErr);
+                            } else {
+                                handleVenmoSuccess(payload);
+                            }
+                        });
+                        return;
+                    }
+                });
+            });
+            function displayVenmoButton(venmoInstance) {
+                // Assumes that venmoButton is initially display: none.
+                venmoButton.style.display = 'block';
+                venmoButton.addEventListener('click', function () {
+                    venmoButton.disabled = true;
+                    venmoInstance.tokenize(function (tokenizeErr, payload) {
+                        venmoButton.removeAttribute('disabled');
+                        if (tokenizeErr) {
+                            handleVenmoError(tokenizeErr);
+                        } else {
+                            handleVenmoSuccess(payload);
+                        }
+                    });
+                });
+            }
+            function handleVenmoError(err) {
+                if (err.code === 'VENMO_CANCELED') {
+                    console.log('App is not available or user aborted payment flow');
+                } else if (err.code === 'VENMO_APP_CANCELED') {
+                    console.log('User canceled payment flow');
+                } else {
+                    console.error('An error occurred:', err.message);
+                }
+            }
+            function handleVenmoSuccess(payload) {
+                // Send the payment method nonce to your server, e.g. by injecting
+                // it into your form as a hidden input.
+                console.log('Got a payment method nonce:', payload.nonce);
+                // Display the Venmo username in your checkout UI.
+                console.log('Venmo user:', payload.details.username);
+            }
+        </script>
+    </div>
+</body>
+
+</html>

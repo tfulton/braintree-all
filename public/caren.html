@@ -1,0 +1,134 @@
+<html>
+
+<head>
+    <title>Braintree Client SDK Test</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.22.0/js/client.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.22.0/js/paypal-checkout.min.js"></script>
+    <script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
+</head>
+
+<body>
+    <div class="ui attached stackable menu">
+        <div class="ui container">
+            <a class="item" id="home">
+                <i class="home icon"></i> Home
+            </a>
+        </div>
+    </div>
+    <div class="ui raised container segment visible content">
+        <h2 class="ui header">Braintree Client SDK Test</h2>
+        <div class="ui form">
+            <div class="field">
+                <label id="label">Payment Data</label>
+                <div id="cart">
+                    <pre>
+                <textarea id="paymentJson" rows="20" cols="10" READONLY/>
+                </textarea>
+            </pre>
+                </div>
+            </div>
+        </div>
+        <p />
+        <div id="paypal-button"></div>
+    </div>
+    <script>
+        //var paymentData = {flow: 'vault'}
+        var paymentData = {
+            flow: 'checkout',
+            intent: 'Order',
+            amount: '15.00',
+            orderId: "abcCVS125",
+            currency: 'USD',
+            displayName: 'Athleta',
+            enableShippingAddress: true,
+            shippingAddressEditable: false,
+            shippingAddressOverride: {
+                recipientName: 'Caren Lierz',
+                line1: '1234 Main St.',
+                line2: 'Unit 1',
+                city: 'Lincoln',
+                countryCode: 'US',
+                postalCode: '90210',
+                state: 'NE'
+            }
+        };
+        braintree.client.create({
+            // using a static token ... reducing complexity ATM
+            authorization: 'sandbox_d5nght9x_2hxkjv924yk8xgn4'
+        }, function (clientErr, clientInstance) {
+            // Stop if there was a problem creating the client.
+            // This could happen if there is a network error or if the authorization
+            // is invalid.
+            if (clientErr) {
+                console.error('Error creating client:', clientErr);
+                return;
+            }
+            // set the text area with payment data
+            console.log("paymentData", paymentData);
+            document.getElementById("paymentJson").value = JSON.stringify(paymentData, null, 4);
+            // Create a PayPal Checkout component.
+            braintree.paypalCheckout.create({
+                client: clientInstance
+            }, function (paypalCheckoutErr, paypalCheckoutInstance) {
+                // Stop if there was a problem creating PayPal Checkout.
+                // This could happen if there was a network error or if it's incorrectly
+                // configured.
+                if (paypalCheckoutErr) {
+                    console.error('Error creating PayPal Checkout:', paypalCheckoutErr);
+                    return;
+                }
+                // Set up PayPal with the checkout.js library
+                paypal.Button.render({
+                    env: 'sandbox', // or 'production'
+                    commit: false,
+                    payment: function () {
+                        console.log("here");
+                        return paypalCheckoutInstance.createPayment(paymentData)
+                        .then(function(payload){
+                            console.log("Huraaahhh we made it!!!", payload)
+                        }).catch(function (error) {
+                            console.log("ERROR IS HERE!!!", JSON.stringify(error, null, 4));
+                        });;
+                    },
+                    onAuthorize: function (data, actions) {
+                        console.log("PP onAuthorize response:", data);
+                        //                    actions.payment.get().then(console.log)
+                        return paypalCheckoutInstance
+                            .tokenizePayment(data)
+                            .then(function (payload) {
+                                document.getElementById("paypal-button").style.visibility = 'hidden';
+                                console.log("paypalCheckoutInstance.tokenizePayment: ", payload)
+                                document.getElementById("label").innerHTML = "BT paypalCheckoutInstance.tokenizePayment RESPONSE"
+                                document.getElementById("cart").innerHTML = "<div><pre>" + JSON.stringify(payload, null, 4) + "</pre></div>"
+                            })
+                    },
+                    onError: function (err) {
+                        console.error('checkout.js error', err);
+                        console.log(err.error);
+                    },
+                    onCancel: function (data) {
+                        console.log('checkout.js payment cancelled', JSON.stringify(data, 0, 2));
+                    },
+                    onError: function (err) {
+                        console.log('checkout.js error', err);
+                    }
+                }, '#paypal-button').then(function () {
+                    // The PayPal button will be rendered in an html element with the id
+                    // `paypal-button`. This function will be called when the PayPal button
+                    // is set up and ready to be used.
+                });
+            })
+                ;
+        })
+            ;
+        $("#home").click(function () {
+            /* function goes in here */
+            location.reload()
+        });
+    </script>
+</body>
+
+</html>

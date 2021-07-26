@@ -1,0 +1,94 @@
+<html>
+
+<head>
+    <title>Braintree Client SDK Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+    <script src="https://js.braintreegateway.com/web/3.50.0/js/client.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.50.0/js/hosted-fields.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.50.0/js/paypal.min.js"></script>
+</head>
+
+<body>
+    <div class="ui attached stackable menu">
+        <div class="ui container">
+            <a class="item" id="home">
+                <i class="home icon"></i> Home
+            </a>
+        </div>
+    </div>
+    <div class="ui raised container segment visible content">
+        <h2 class="ui header">Braintree Client SDK Test</h2>
+        <div class="ui form">
+            <div class="field">
+                <label id="label">Payment Data</label>
+                <div id="cart">
+                    <pre>
+                    <textarea id="paymentJson" rows="20" READONLY>
+                    </textarea>
+                </pre>
+                </div>
+            </div>
+        </div>
+        <button class="ui button" id="ppButton">
+            Pay Todd
+        </button>
+    </div>
+
+    <script>
+
+
+        braintree.client.create({
+            authorization: 'sandbox_bn4dn4nd_d3dk6npsbpz7t3s8' // tfulton
+            // authorization: 'eyJ2ZXJzaW9uIjoxLCJhdXRob3JpemF0aW9uRmluZ2VycHJpbnQiOiI0OTkxZDgzNWI5MDU0ZGIyNjYzNTUxNTVhZTI5YmQ1OThlNGU5NTMzODk4YzI0NjJkYjM4NjM3YzNlNDgyZjAxfGNyZWF0ZWRfYXQ9MjAxOS0xMC0wMlQxOTo1NDoyMS4yMjIzMzEyMDMrMDAwMFx1MDAyNm1lcmNoYW50X2FjY291bnRfaWQ9RUNTVHVuaW5nTExDX2luc3RhbnRcdTAwMjZtZXJjaGFudF9pZD1zN3k5em1mMjlkNHR5N3BtXHUwMDI2cHVibGljX2tleT1kNGhua2tyMmhkemRwN24yIiwiY29uZmlnVXJsIjoiaHR0cHM6Ly9hcGkuYnJhaW50cmVlZ2F0ZXdheS5jb206NDQzL21lcmNoYW50cy9zN3k5em1mMjlkNHR5N3BtL2NsaWVudF9hcGkvdjEvY29uZmlndXJhdGlvbiIsImdyYXBoUUwiOnsidXJsIjoiaHR0cHM6Ly9wYXltZW50cy5icmFpbnRyZWUtYXBpLmNvbS9ncmFwaHFsIiwiZGF0ZSI6IjIwMTgtMDUtMDgifSwiY2hhbGxlbmdlcyI6W10sImVudmlyb25tZW50IjoicHJvZHVjdGlvbiIsImNsaWVudEFwaVVybCI6Imh0dHBzOi8vYXBpLmJyYWludHJlZWdhdGV3YXkuY29tOjQ0My9tZXJjaGFudHMvczd5OXptZjI5ZDR0eTdwbS9jbGllbnRfYXBpIiwiYXNzZXRzVXJsIjoiaHR0cHM6Ly9hc3NldHMuYnJhaW50cmVlZ2F0ZXdheS5jb20iLCJhdXRoVXJsIjoiaHR0cHM6Ly9hdXRoLnZlbm1vLmNvbSIsImFuYWx5dGljcyI6eyJ1cmwiOiJodHRwczovL2NsaWVudC1hbmFseXRpY3MuYnJhaW50cmVlZ2F0ZXdheS5jb20vczd5OXptZjI5ZDR0eTdwbSJ9LCJ0aHJlZURTZWN1cmVFbmFibGVkIjpmYWxzZSwicGF5cGFsRW5hYmxlZCI6dHJ1ZSwicGF5cGFsIjp7ImRpc3BsYXlOYW1lIjoiRUNTIFR1bmluZywgTExDIiwiY2xpZW50SWQiOm51bGwsInByaXZhY3lVcmwiOm51bGwsInVzZXJBZ3JlZW1lbnRVcmwiOm51bGwsImJhc2VVcmwiOiJodHRwczovL2Fzc2V0cy5icmFpbnRyZWVnYXRld2F5LmNvbSIsImFzc2V0c1VybCI6Imh0dHBzOi8vY2hlY2tvdXQucGF5cGFsLmNvbSIsImRpcmVjdEJhc2VVcmwiOm51bGwsImFsbG93SHR0cCI6ZmFsc2UsImVudmlyb25tZW50Tm9OZXR3b3JrIjpmYWxzZSwiZW52aXJvbm1lbnQiOiJsaXZlIiwidW52ZXR0ZWRNZXJjaGFudCI6ZmFsc2UsImJyYWludHJlZUNsaWVudElkIjoiQVJLcllSRGgzQUdYRHpXN3NPXzNiU2txLVUxQzdIR191V05DLXo1N0xqWVNETlVPU2FPdElhOXE2VnBXIiwiYmlsbGluZ0FncmVlbWVudHNFbmFibGVkIjp0cnVlLCJtZXJjaGFudEFjY291bnRJZCI6IkVDU1R1bmluZ0xMQ19pbnN0YW50IiwiY3VycmVuY3lJc29Db2RlIjoiVVNEIn0sIm1lcmNoYW50QWNjb3VudElkIjoiRUNTVHVuaW5nTExDX2luc3RhbnQifQ==' // tfulton
+        }, function (clientErr, clientInstance) {
+
+            // Stop if there was a problem creating the client.
+            // This could happen if there is a network error or if the authorization
+            // is invalid.
+            if (clientErr) {
+                console.error('Error creating client:', clientErr);
+                return;
+            }
+
+            // set the text area with payment data
+            // document.getElementById("paymentJson").value = JSON.stringify(paymentData, null, 4);
+
+            var paypalButton = document.getElementById("ppButton");
+
+            // Create a PayPal Component
+            braintree.paypal.create({
+                client: clientInstance
+            }, function (paypalErr, paypalInstance) {
+                paypalButton.removeAttribute('disabled');
+
+                paypalButton.addEventListener('click', function (event) {
+                    paypalButton.setAttribute('disabled', true);
+
+                    paypalInstance.tokenize({
+                        flow: 'vault'
+                    }, function (tokenizeErr, payload) {
+                        // Stop if there was an error.
+                        if (tokenizeErr) {
+                            paypalButton.removeAttribute('disabled');
+                            return;
+                        }
+
+                        displayPrettyPayPal(payload);
+                    });
+                }, false);
+            })
+        });
+
+        $("#home").click(function () {
+            /* function goes in here */
+            location.reload()
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,209 @@
+<html>
+
+<head>
+    <title>Braintree Client SDK Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+    <script src="https://js.braintreegateway.com/web/3.50.0/js/client.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.50.0/js/hosted-fields.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.50.0/js/paypal-checkout.min.js"></script>
+    <script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
+
+    <script src="https://www.paypalobjects.com/upstream/bizcomponents/js/messaging.js"></script>
+</head>
+
+<body>
+    <div class="ui attached stackable menu">
+        <div class="ui container">
+            <a class="item" id="home">
+                <i class="home icon"></i> Home
+            </a>
+        </div>
+    </div>
+    <div class="ui raised container segment visible content">
+        <div id="pp-message"></div>
+    </div>
+    <div class="ui raised container segment visible content">
+        <h2 class="ui header">Braintree Client SDK Test</h2>
+        <div class="ui form">
+            <div class="field">
+                <label id="label">Payment Data</label>
+                <div id="cart">
+                    <pre>
+                    <textarea id="paymentJson" rows="20" READONLY>
+                    </textarea>
+                </pre>
+                </div>
+            </div>
+        </div>
+        <div id="paypal-button"></div>
+    </div>
+
+    <script>
+
+        // var paymentData = {
+        //     flow: 'vault',
+        //     displayName: "Testing Another Name"
+        // }
+
+        // var paymentData = {
+        //     flow: 'checkout', // Required
+        //     intent: 'order',
+        //     amount: 4.00, // Required
+        //     orderId: "MAY23_010",
+        //     currency: 'USD', // Required
+        //     enableShippingAddress: true,
+        //     enableBillingAddress: true,
+        //     shippingAddressEditable: true
+        // };
+
+        var paymentData = {
+            flow: 'vault', // Required
+            offerCredit: true,
+            amount: 10.00, // Required
+            orderId: "july31_001",
+            currency: 'USD', // Required
+            enableShippingAddress: true,
+            enableBillingAddress: true,
+            shippingAddressEditable: false,
+            //    shippingAddressOverride: {
+            //        editable: false,
+            //        recipientName: 'Scruff McGruff',
+            //        line1: '123 Townsend Street',
+            //        line2: '6th Floor',
+            //        city: 'San Francisco',
+            //        countryCode: 'US',
+            //        postalCode: '94107',
+            //        state: 'CA',
+            //        phone: '123.456.7890'
+            //    }
+        };
+
+        paypal.Messages({
+            amount: 900,
+            style: {
+                layout: 'text',
+                logo: {
+                    type: 'primary',
+                    position: 'right'
+                },
+                text: {
+                    color: "black"
+                },
+            },
+            // account: "WX74857PVJ448" // tofulton@paypal.com production
+            account: "U3W86TPYJE8D6" // tofulton-facilitator@paypal.com sandbox
+        })
+            .render('#pp-message');
+
+        $("#home").click(function () {
+            /* function goes in here */
+            location.reload()
+        });
+
+        braintree.client.create({
+            authorization: 'sandbox_bn4dn4nd_d3dk6npsbpz7t3s8' // tfulton
+        }, function (clientErr, clientInstance) {
+
+            // Stop if there was a problem creating the client.
+            // This could happen if there is a network error or if the authorization
+            // is invalid.
+            if (clientErr) {
+                console.error('Error creating client:', clientErr);
+                return;
+            }
+
+            // set the text area with payment data
+            document.getElementById("paymentJson").value = JSON.stringify(paymentData, null, 4);
+
+            // Create a PayPal Checkout component.
+            braintree.paypalCheckout.create({
+                client: clientInstance,
+                // merchantAccountId: "LOB-USD2"
+            }, function (paypalCheckoutErr, paypalCheckoutInstance) {
+
+                // Stop if there was a problem creating PayPal Checkout.
+                // This could happen if there was a network error or if it's incorrectly
+                // configured.
+                if (paypalCheckoutErr) {
+                    console.error('Error creating PayPal Checkout:', paypalCheckoutErr);
+                    return;
+                }
+
+                // Set up PayPal with the checkout.js library
+                paypal.Button.render({
+                    env: 'sandbox', // or 'production'
+                    commit: true, // This will add the transaction amount to the PayPal button
+
+                    style: {
+                        layout: 'vertical',  // horizontal | vertical
+                        size: 'medium',    // medium | large | responsive
+                        shape: 'rect',      // pill | rect
+                        color: 'blue'       // gold | blue | silver | black
+                    },
+
+                    // locale: 'pt_BR',
+                    // locale: 'es_MX',
+                    locale: 'en_US',
+
+                    funding: {
+                        allowed: [],
+                        disallowed: [paypal.FUNDING.CREDIT, paypal.FUNDING.CARD]
+                    },
+
+                    payment: function () {
+
+                        return paypalCheckoutInstance.createPayment(paymentData)
+                            .then(function (val) {
+                                console.log("paypalCheckoutInstance.createPayment: ", val);
+                                return val;
+                            })
+                            .catch(function (error) {
+                                console.log("ERROR paypalCheckoutInstance.createPayment: \n", JSON.stringify(error, null, 4));
+                            })
+
+
+                    },
+
+                    onAuthorize: function (data, actions) {
+
+                        console.log("PP onAuthorize response:", data);
+                        console.log("PP onAuthorize response:", JSON.stringify(data));
+                        return paypalCheckoutInstance.tokenizePayment(data)
+                            .then(function (payload) {
+                                document.getElementById("paypal-button").style.visibility = 'hidden';
+                                console.log("paypalCheckoutInstance.tokenizePayment: ", JSON.stringify(payload))
+                                document.getElementById("label").innerHTML = "BT paypalCheckoutInstance.tokenizePayment RESPONSE"
+                                document.getElementById("cart").innerHTML = "<div><pre>" + JSON.stringify(payload, null, 4) + "</pre></div>"
+                            })
+                    },
+
+                    onCancel: function (data) {
+                        console.log('checkout.js payment cancelled', data);
+                    },
+
+                    onError: function (err) {
+                        console.error('checkout.js error', err);
+                    }
+
+                }, '#paypal-button').then(function () {
+                    // The PayPal button will be rendered in an html element with the id
+                    // `paypal-button`. This function will be called when the PayPal button
+                    // is set up and ready to be used.
+                });
+
+            });
+        });
+
+        $("#home").click(function () {
+            /* function goes in here */
+            location.reload()
+        });
+
+    </script>
+</body>
+
+</html>

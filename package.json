@@ -1,0 +1,36 @@
+{
+  "name": "bt-pp-order-auth",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "braintree": "^2.24.0",
+    "braintree-web": "^3.70.0",
+    "config": "^3.3.3",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "debug": "~2.6.3",
+    "express": "^4.17.1",
+    "graphql-request": "^3.4.0",
+    "graphql": "^15.4.0",
+    "hbs": "^4.1.1",
+    "https": "^1.0.0",
+    "js-base64": "^2.6.4",
+    "moment": "^2.29.1",
+    "morgan": "^1.10.0",
+    "node-cache": "^5.1.2",
+    "serve-favicon": "~2.4.2"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.3",
+    "prettier": "^1.19.1",
+    "validator": "^11.1.0"
+  },
+  "engines": {
+    "node": "8.4.0"
+  }
+}

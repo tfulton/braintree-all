@@ -1,0 +1,1021 @@
+{
+	"info": {
+		"_postman_id": "2b352ea5-834c-4462-a5d5-d734e14061f6",
+		"name": "BT REST",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authorization - Client Token",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/auth/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer Create w/Nonce",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"paymentMethodNonce\": \"8979fff3-6b86-09d4-76a0-ef4449e89ee5\",\n    \"firstName\": \"Todd\",\n    \"lastName\": \"Fulton_june042019\",\n    \"company\": \"PayPal\",\n    \"email\": \"tofulton-buyer@paypal.com\",\n    \"phone\": \"415.505.5197\",\n    \"fax\": \"415.555.1212\",\n    \"website\": \"www.paypal.com\",\n    \"options\": {}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"customer"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Customer Create w/Nonce",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": false
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"paymentMethodNonce\": \"4a3b58fc-69c8-0157-5be0-54e165254799\",\n  \"firstName\": \"Todd\",\n  \"lastName\": \"Fulton_LINEITEMTEST\",\n  \"company\": \"PayPal\",\n  \"email\": \"tofulton-buyer@paypal.com\",\n  \"phone\": \"415.505.5197\",\n  \"fax\": \"415.555.1212\",\n  \"website\": \"www.paypal.com\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/customer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"customer"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Connection",
+							"value": "keep-alive",
+							"name": "Connection",
+							"description": "Options that are desired for the connection"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1258",
+							"name": "Content-Length",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 22 Jun 2018 13:20:50 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"4ea-fgDVehM8dl9CJvOGtCYYFTze5co\"",
+							"name": "ETag",
+							"description": "An identifier for a specific version of a resource, often a message digest"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express",
+							"name": "X-Powered-By",
+							"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+						}
+					],
+					"cookie": [],
+					"body": "{\"customer\":{\"id\":\"520806703\",\"merchantId\":\"d3dk6npsbpz7t3s8\",\"firstName\":\"Todd\",\"lastName\":\"Fulton_LINEITEMTEST\",\"company\":\"PayPal\",\"email\":\"tofulton-buyer@paypal.com\",\"phone\":\"415.505.5197\",\"fax\":\"415.555.1212\",\"website\":\"www.paypal.com\",\"createdAt\":\"2018-06-22T13:20:48Z\",\"updatedAt\":\"2018-06-22T13:20:48Z\",\"customFields\":\"\",\"creditCards\":[],\"paypalAccounts\":[{\"billingAgreementId\":null,\"createdAt\":\"2018-06-22T13:20:48Z\",\"customerId\":\"520806703\",\"default\":true,\"email\":\"tofulton-buyer@paypal.com\",\"imageUrl\":\"https://assets.braintreegateway.com/payment_method_logo/paypal.png?environment=sandbox\",\"subscriptions\":[],\"token\":\"6xzrdn\",\"updatedAt\":\"2018-06-22T13:20:48Z\",\"isChannelInitiated\":false,\"payerId\":\"VTW5PBHNTV24A\",\"payerInfo\":null,\"limitedUseOrderId\":\"O-5WM82720DS0076614\"}],\"addresses\":[],\"paymentMethods\":[{\"billingAgreementId\":null,\"createdAt\":\"2018-06-22T13:20:48Z\",\"customerId\":\"520806703\",\"default\":true,\"email\":\"tofulton-buyer@paypal.com\",\"imageUrl\":\"https://assets.braintreegateway.com/payment_method_logo/paypal.png?environment=sandbox\",\"subscriptions\":[],\"token\":\"6xzrdn\",\"updatedAt\":\"2018-06-22T13:20:48Z\",\"isChannelInitiated\":false,\"payerId\":\"VTW5PBHNTV24A\",\"payerInfo\":null,\"limitedUseOrderId\":\"O-5WM82720DS0076614\"}]},\"success\":true}"
+				}
+			]
+		},
+		{
+			"name": "Customer Create w/Nonce + payeeEmail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"paymentMethodNonce\": \"c3277d63-90f3-08df-629c-90542abf5f23\",\n  \"firstName\": \"Todd\",\n  \"lastName\": \"Fulton_AE_50\",\n  \"company\": \"PayPal\",\n  \"email\": \"tofulton-buyer@paypal.com\",\n  \"phone\": \"415.505.5197\",\n  \"fax\": \"415.555.1212\",\n  \"website\": \"www.paypal.com\",\n  \"options\": {\n    \"paypal\": {\n      \"payeeEmail\": \"tfulton-facilitator2@britto.io\"\n    }\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer Get",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/customer/874973656",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"customer",
+						"874973656"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Payment Method Create w/Nonce",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customerId\": 283647583,\n    \"paymentMethodNonce\": \"ec1cd602-bfb3-05f6-64e9-aee69d46ebfe\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/method",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"method"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Payment Method Create w/Customer + Addr",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customerId\": 283647583,\n    \"paymentMethodNonce\": \"\",\n    \"billingAddress\": {\n        \"firstName\": \"Todd\",\n        \"lastName\": \"Fulton\",\n        \"company\": \"Todd's Company\",\n        \"streetAddress\": \"123 Townsend Street\",\n        \"extendedAddress\": \"6th Floor\",\n        \"locality\": \"San Francisco\",\n        \"region\": \"CA\",\n        \"postalCode\": \"94107\",\n        \"countryCodeAlpha2\": \"US\",\n        \"countryName\": \"United States of America\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/method",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"method"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Payment Method Get",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/method/cxk8kk",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"method",
+						"cxk8kk"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction Sale w/Nonce",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": \"10.00\",\n    \"paymentMethodNonce\": \"3899a6bf-9367-0a88-6935-c7e8a3604358\",\n    \"orderId\": \"DEC12_002\",\n    \"merchantAccountId\": \"LOB-MXN\",\n    \"customer\": {\n        \"firstName\": \"Todd\",\n        \"lastName\": \"Fulton\",\n        \"company\": \"Braintree\",\n        \"phone\": \"312-555-1234\",\n        \"fax\": \"312-555-12346\",\n        \"website\": \"http://www.example.com\",\n        \"email\": \"tofulton-buyer@paypal.com\"\n    },\n    \"shipping\": {\n        \"firstName\": \"Todd\",\n        \"lastName\": \"Fulton\",\n        \"company\": \"Braintree\",\n        \"streetAddress\": \"123 Townsend Street\",\n        \"extendedAddress\": \"6th Floor\",\n        \"locality\": \"San Francisco\",\n        \"region\": \"CA\",\n        \"postalCode\": \"94107\",\n        \"countryCodeAlpha2\": \"US\"\n    },\n    \"billing\": {\n        \"firstName\": \"Todd\",\n        \"lastName\": \"Fulton\",\n        \"company\": \"Braintree\",\n        \"streetAddress\": \"123 Townsend Street\",\n        \"extendedAddress\": \"6th Floor\",\n        \"locality\": \"San Francisco\",\n        \"region\": \"CA\",\n        \"postalCode\": \"94107\",\n        \"countryCodeAlpha2\": \"US\"\n    },\n    \"options\": {\n        \"submitForSettlement\": false,\n        \"storeInVaultOnSuccess\": false\n    }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/checkout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"checkout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction Sale w/Nonce Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": \"11.10\",\n  \"paymentMethodNonce\": \"a8bf334d-3c4e-0969-5043-e1239166d82f\",\n  \"orderId\": \"NOV05_101\",\n  \"customer\": {\n    \"firstName\": \"Todd\",\n    \"lastName\": \"Fulton\",\n    \"phone\": \"312-555-1234\",\n    \"email\": \"tofulton-buyer@paypal.com\"\n  },\n  \"shipping\": {\n    \"firstName\": \"Todd\",\n    \"lastName\": \"Fulton\",\n    \"streetAddress\": \"540 Bristol Ferry Road\",\n    \"locality\": \"Portsmouth\",\n    \"region\": \"RI\",\n    \"postalCode\": \"02871\",\n    \"countryCodeAlpha2\": \"US\"\n  },\n  \"billing\": {\n    \"firstName\": \"Todd\",\n    \"lastName\": \"Fulton\",\n    \"company\": \"Braintree\",\n    \"streetAddress\": \"540 Bristol Ferry Road\",\n    \"locality\": \"Portsmouth\",\n    \"region\": \"RI\",\n    \"postalCode\": \"02871\",\n    \"countryCodeAlpha2\": \"US\"\n  },\n  \"options\": {\n    \"submitForSettlement\": true,\n    \"storeInVaultOnSuccess\": true\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/checkout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"checkout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction w/CustomerId",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"customerId\": \"117416086\",\n  \"amount\": \"5.00\",\n  \"orderId\": \"MAY_29_002\",\n  \"options\": {\n    \"submitForSettlement\": true\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/checkout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"checkout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction Sale w/Customer Id + line items",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": \"10.00\",\n    \"customerId\": \"610299031\",\n    \"orderId\": \"MAY_23_001\",\n    \"merchantAccountId\": \"paypal\",\n    \"lineItems\": [\n        {\n            \"discountAmount\": \"0.00\",\n            \"name\": \"Scorpions T-shirt\",\n            \"productCode\": \"0001\",\n            \"quantity\": \"1\",\n            \"kind\": \"debit\",\n            \"unitAmount\": \"5.00\",\n            \"unitTaxAmount\": \"1.00\",\n            \"totalAmount\": \"6.00\"\n        },\n        {\n            \"discountAmount\": \"0.00\",\n            \"name\": \"AC/DC The ultimate Band\",\n            \"productCode\": \"0002\",\n            \"quantity\": \"1\",\n            \"kind\": \"debit\",\n            \"unitAmount\": \"3.00\",\n            \"unitTaxAmount\": \"1.00\",\n            \"totalAmount\": \"4.00\"\n        }\n    ],\n    \"options\": {\n        \"submitForSettlement\": true,\n        \"storeInVaultOnSuccess\": false\n    }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/checkout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"checkout"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Transaction Sale w/Customer Id",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": \"3.00\",\n  \"orderId\": \"JUN08_ORDER_001\",\n  \"customerId\": \"873099783\",\n  \"options\": {\n    \"submitForSettlement\": false\n  }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/checkout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"checkout"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Connection",
+							"value": "keep-alive",
+							"name": "Connection",
+							"description": "Options that are desired for the connection"
+						},
+						{
+							"key": "Content-Length",
+							"value": "4227",
+							"name": "Content-Length",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 05 Jun 2018 21:58:52 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1083-oIFMlqWlvf+vXmSvQa5WoxGRQYM\"",
+							"name": "ETag",
+							"description": "An identifier for a specific version of a resource, often a message digest"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express",
+							"name": "X-Powered-By",
+							"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+						}
+					],
+					"cookie": [],
+					"body": "{\"transaction\":{\"id\":\"jmt1jg5n\",\"status\":\"authorized\",\"type\":\"sale\",\"currencyIsoCode\":\"USD\",\"amount\":\"3.00\",\"merchantAccountId\":\"paypal\",\"subMerchantAccountId\":null,\"masterMerchantAccountId\":null,\"orderId\":\"JUN05_ORDER_001\",\"createdAt\":\"2018-06-05T21:58:46Z\",\"updatedAt\":\"2018-06-05T21:58:52Z\",\"customer\":{\"id\":\"522541569\",\"firstName\":\"Todd\",\"lastName\":\"Fulton\",\"company\":\"PayPal\",\"email\":\"tofulton-buyer@paypal.com\",\"website\":\"www.paypal.com\",\"phone\":\"415.505.5197\",\"fax\":\"415.555.1212\"},\"billing\":{\"id\":null,\"firstName\":null,\"lastName\":null,\"company\":null,\"streetAddress\":null,\"extendedAddress\":null,\"locality\":null,\"region\":null,\"postalCode\":null,\"countryName\":null,\"countryCodeAlpha2\":null,\"countryCodeAlpha3\":null,\"countryCodeNumeric\":null},\"refundId\":null,\"refundIds\":[],\"refundedTransactionId\":null,\"partialSettlementTransactionIds\":[],\"authorizedTransactionId\":null,\"settlementBatchId\":null,\"shipping\":{\"id\":null,\"firstName\":null,\"lastName\":null,\"company\":null,\"streetAddress\":null,\"extendedAddress\":null,\"locality\":null,\"region\":null,\"postalCode\":null,\"countryName\":null,\"countryCodeAlpha2\":null,\"countryCodeAlpha3\":null,\"countryCodeNumeric\":null},\"customFields\":\"\",\"avsErrorResponseCode\":null,\"avsPostalCodeResponseCode\":\"I\",\"avsStreetAddressResponseCode\":\"I\",\"cvvResponseCode\":\"I\",\"gatewayRejectionReason\":null,\"processorAuthorizationCode\":null,\"processorResponseCode\":\"1000\",\"processorResponseText\":\"Approved\",\"additionalProcessorResponse\":null,\"voiceReferralNumber\":null,\"purchaseOrderNumber\":null,\"taxAmount\":null,\"taxExempt\":false,\"creditCard\":{\"token\":\"gnztwc\",\"bin\":null,\"last4\":null,\"cardType\":null,\"expirationMonth\":\"\",\"expirationYear\":\"\",\"customerLocation\":null,\"cardholderName\":null,\"imageUrl\":\"https://assets.braintreegateway.com/payment_method_logo/unknown.png?environment=sandbox\",\"prepaid\":\"Unknown\",\"healthcare\":\"Unknown\",\"debit\":\"Unknown\",\"durbinRegulated\":\"Unknown\",\"commercial\":\"Unknown\",\"payroll\":\"Unknown\",\"issuingBank\":\"Unknown\",\"countryOfIssuance\":\"Unknown\",\"productId\":\"Unknown\",\"uniqueNumberIdentifier\":null,\"venmoSdk\":false,\"maskedNumber\":\"null******null\",\"expirationDate\":\"/\"},\"paypal\":{\"token\":\"gnztwc\",\"payerEmail\":\"tofulton-buyer@paypal.com\",\"paymentId\":\"PAY-38166018CK003411CLMLQOPA\",\"authorizationId\":\"66M45380GR775923U\",\"imageUrl\":\"https://assets.braintreegateway.com/payment_method_logo/paypal.png?environment=sandbox\",\"debugId\":\"cba347231d81\",\"payeeId\":null,\"payeeEmail\":null,\"customField\":null,\"payerId\":\"VTW5PBHNTV24A\",\"payerFirstName\":\"test\",\"payerLastName\":\"buyer\",\"payerStatus\":\"VERIFIED\",\"sellerProtectionStatus\":\"ELIGIBLE\",\"captureId\":null,\"refundId\":null,\"transactionFeeAmount\":null,\"transactionFeeCurrencyIsoCode\":null,\"description\":null},\"statusHistory\":[{\"timestamp\":\"2018-06-05T21:58:52Z\",\"status\":\"authorized\",\"amount\":\"3.00\",\"user\":\"tfulton\",\"transactionSource\":\"api\"}],\"planId\":null,\"subscriptionId\":null,\"subscription\":{\"billingPeriodEndDate\":null,\"billingPeriodStartDate\":null},\"addOns\":[],\"discounts\":[],\"descriptor\":{\"name\":null,\"phone\":null,\"url\":null},\"recurring\":false,\"channel\":null,\"serviceFeeAmount\":null,\"escrowStatus\":null,\"disbursementDetails\":{\"disbursementDate\":null,\"settlementAmount\":null,\"settlementCurrencyIsoCode\":null,\"settlementCurrencyExchangeRate\":null,\"fundsHeld\":null,\"success\":null},\"disputes\":[],\"authorizationAdjustments\":[],\"paymentInstrumentType\":\"paypal_account\",\"processorSettlementResponseCode\":\"\",\"processorSettlementResponseText\":\"\",\"threeDSecureInfo\":null,\"shipsFromPostalCode\":null,\"shippingAmount\":null,\"discountAmount\":null,\"paypalAccount\":{\"token\":\"gnztwc\",\"payerEmail\":\"tofulton-buyer@paypal.com\",\"paymentId\":\"PAY-38166018CK003411CLMLQOPA\",\"authorizationId\":\"66M45380GR775923U\",\"imageUrl\":\"https://assets.braintreegateway.com/payment_method_logo/paypal.png?environment=sandbox\",\"debugId\":\"cba347231d81\",\"payeeId\":null,\"payeeEmail\":null,\"customField\":null,\"payerId\":\"VTW5PBHNTV24A\",\"payerFirstName\":\"test\",\"payerLastName\":\"buyer\",\"payerStatus\":\"VERIFIED\",\"sellerProtectionStatus\":\"ELIGIBLE\",\"captureId\":null,\"refundId\":null,\"transactionFeeAmount\":null,\"transactionFeeCurrencyIsoCode\":null,\"description\":null},\"coinbaseAccount\":{},\"applePayCard\":{},\"androidPayCard\":{},\"visaCheckoutCard\":{},\"masterpassCard\":{}},\"success\":true}"
+				},
+				{
+					"name": "Transaction Sale w/Customer Id - linte items",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": false
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": \"10.00\",\n  \"orderId\": \"JUN22_001\",\n  \"customerId\": \"520806703\",\n  \"options\": {\n    \"submitForSettlement\": false,\n    \"storeInVaultOnSuccess\": false\n  },\n  \"lineItems\": [\n  \t{\n  \t\t\"name\": \"jacket\",\n  \t\t\"commodityCode\": \"code001\",\n  \t\t\"description\": \"Blue jacket\",\n  \t\t\"kind\": \"debit\",\n  \t\t\"quantity\": \"1\",\n  \t\t\"unitAmount\": 10.00,\n  \t\t\"totalAmount\": 10.00\n  \t}\n  \t\n  ]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/checkout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"checkout"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Connection",
+							"value": "keep-alive",
+							"name": "Connection",
+							"description": "Options that are desired for the connection"
+						},
+						{
+							"key": "Content-Length",
+							"value": "4238",
+							"name": "Content-Length",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 22 Jun 2018 13:26:52 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"108e-vJV3OrpsKtImUj4mC69nGy9s7Ls\"",
+							"name": "ETag",
+							"description": "An identifier for a specific version of a resource, often a message digest"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express",
+							"name": "X-Powered-By",
+							"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+						}
+					],
+					"cookie": [],
+					"body": "{\"transaction\":{\"id\":\"1mr6zmhq\",\"status\":\"authorized\",\"type\":\"sale\",\"currencyIsoCode\":\"USD\",\"amount\":\"10.00\",\"merchantAccountId\":\"paypal\",\"subMerchantAccountId\":null,\"masterMerchantAccountId\":null,\"orderId\":\"JUN22_001\",\"createdAt\":\"2018-06-22T13:26:40Z\",\"updatedAt\":\"2018-06-22T13:26:50Z\",\"customer\":{\"id\":\"520806703\",\"firstName\":\"Todd\",\"lastName\":\"Fulton_LINEITEMTEST\",\"company\":\"PayPal\",\"email\":\"tofulton-buyer@paypal.com\",\"website\":\"www.paypal.com\",\"phone\":\"415.505.5197\",\"fax\":\"415.555.1212\"},\"billing\":{\"id\":null,\"firstName\":null,\"lastName\":null,\"company\":null,\"streetAddress\":null,\"extendedAddress\":null,\"locality\":null,\"region\":null,\"postalCode\":null,\"countryName\":null,\"countryCodeAlpha2\":null,\"countryCodeAlpha3\":null,\"countryCodeNumeric\":null},\"refundId\":null,\"refundIds\":[],\"refundedTransactionId\":null,\"partialSettlementTransactionIds\":[],\"authorizedTransactionId\":null,\"settlementBatchId\":null,\"shipping\":{\"id\":null,\"firstName\":null,\"lastName\":null,\"company\":null,\"streetAddress\":null,\"extendedAddress\":null,\"locality\":null,\"region\":null,\"postalCode\":null,\"countryName\":null,\"countryCodeAlpha2\":null,\"countryCodeAlpha3\":null,\"countryCodeNumeric\":null},\"customFields\":\"\",\"avsErrorResponseCode\":null,\"avsPostalCodeResponseCode\":\"I\",\"avsStreetAddressResponseCode\":\"I\",\"cvvResponseCode\":\"I\",\"gatewayRejectionReason\":null,\"processorAuthorizationCode\":null,\"processorResponseCode\":\"1000\",\"processorResponseText\":\"Approved\",\"additionalProcessorResponse\":null,\"voiceReferralNumber\":null,\"purchaseOrderNumber\":null,\"taxAmount\":null,\"taxExempt\":false,\"creditCard\":{\"token\":\"6xzrdn\",\"bin\":null,\"last4\":null,\"cardType\":null,\"expirationMonth\":\"\",\"expirationYear\":\"\",\"customerLocation\":null,\"cardholderName\":null,\"imageUrl\":\"https://assets.braintreegateway.com/payment_method_logo/unknown.png?environment=sandbox\",\"prepaid\":\"Unknown\",\"healthcare\":\"Unknown\",\"debit\":\"Unknown\",\"durbinRegulated\":\"Unknown\",\"commercial\":\"Unknown\",\"payroll\":\"Unknown\",\"issuingBank\":\"Unknown\",\"countryOfIssuance\":\"Unknown\",\"productId\":\"Unknown\",\"uniqueNumberIdentifier\":null,\"venmoSdk\":false,\"maskedNumber\":\"null******null\",\"expirationDate\":\"/\"},\"paypal\":{\"token\":\"6xzrdn\",\"payerEmail\":\"tofulton-buyer@paypal.com\",\"paymentId\":\"PAY-20G89936L06883149LMWPOUY\",\"authorizationId\":\"12126588M0630373U\",\"imageUrl\":\"https://assets.braintreegateway.com/payment_method_logo/paypal.png?environment=sandbox\",\"debugId\":\"a1466d48113a5\",\"payeeId\":null,\"payeeEmail\":null,\"customField\":null,\"payerId\":\"VTW5PBHNTV24A\",\"payerFirstName\":\"test\",\"payerLastName\":\"buyer\",\"payerStatus\":\"VERIFIED\",\"sellerProtectionStatus\":\"ELIGIBLE\",\"captureId\":null,\"refundId\":null,\"transactionFeeAmount\":null,\"transactionFeeCurrencyIsoCode\":null,\"description\":null},\"statusHistory\":[{\"timestamp\":\"2018-06-22T13:26:50Z\",\"status\":\"authorized\",\"amount\":\"10.00\",\"user\":\"tfulton\",\"transactionSource\":\"api\"}],\"planId\":null,\"subscriptionId\":null,\"subscription\":{\"billingPeriodEndDate\":null,\"billingPeriodStartDate\":null},\"addOns\":[],\"discounts\":[],\"descriptor\":{\"name\":null,\"phone\":null,\"url\":null},\"recurring\":false,\"channel\":null,\"serviceFeeAmount\":null,\"escrowStatus\":null,\"disbursementDetails\":{\"disbursementDate\":null,\"settlementAmount\":null,\"settlementCurrencyIsoCode\":null,\"settlementCurrencyExchangeRate\":null,\"fundsHeld\":null,\"success\":null},\"disputes\":[],\"authorizationAdjustments\":[],\"paymentInstrumentType\":\"paypal_account\",\"processorSettlementResponseCode\":\"\",\"processorSettlementResponseText\":\"\",\"threeDSecureInfo\":null,\"shipsFromPostalCode\":null,\"shippingAmount\":null,\"discountAmount\":null,\"paypalAccount\":{\"token\":\"6xzrdn\",\"payerEmail\":\"tofulton-buyer@paypal.com\",\"paymentId\":\"PAY-20G89936L06883149LMWPOUY\",\"authorizationId\":\"12126588M0630373U\",\"imageUrl\":\"https://assets.braintreegateway.com/payment_method_logo/paypal.png?environment=sandbox\",\"debugId\":\"a1466d48113a5\",\"payeeId\":null,\"payeeEmail\":null,\"customField\":null,\"payerId\":\"VTW5PBHNTV24A\",\"payerFirstName\":\"test\",\"payerLastName\":\"buyer\",\"payerStatus\":\"VERIFIED\",\"sellerProtectionStatus\":\"ELIGIBLE\",\"captureId\":null,\"refundId\":null,\"transactionFeeAmount\":null,\"transactionFeeCurrencyIsoCode\":null,\"description\":null},\"coinbaseAccount\":{},\"applePayCard\":{},\"androidPayCard\":{},\"visaCheckoutCard\":{},\"masterpassCard\":{}},\"success\":true}"
+				}
+			]
+		},
+		{
+			"name": "Transaction Sale w/Customer Id + address",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": \"10.00\",\n  \"orderId\": \"TEST_MAY10_001\",\n  \"customerId\": \"604801691\",\n  \"shipping\": {\n  \t\"firstName\": \"Todd\",\n  \t\"lastName\": \"Fulton\",\n  \t\"streetAddress\": \"123 Townsend Street\",\n  \t\"locality\": \"San Francisco\",\n  \t\"region\": \"CA\",\n  \t\"postalCode\": \"94107\"\n  },\n  \"options\": {\n    \"submitForSettlement\": false,\n    \"storeInVaultOnSuccess\": false\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/checkout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"checkout"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Transaction Sale w/Customer Id",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": \"3.00\",\n  \"orderId\": \"JUN08_ORDER_001\",\n  \"customerId\": \"873099783\",\n  \"options\": {\n    \"submitForSettlement\": false\n  }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/checkout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"checkout"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Connection",
+							"value": "keep-alive",
+							"name": "Connection",
+							"description": "Options that are desired for the connection"
+						},
+						{
+							"key": "Content-Length",
+							"value": "4227",
+							"name": "Content-Length",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 05 Jun 2018 21:58:52 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1083-oIFMlqWlvf+vXmSvQa5WoxGRQYM\"",
+							"name": "ETag",
+							"description": "An identifier for a specific version of a resource, often a message digest"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express",
+							"name": "X-Powered-By",
+							"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+						}
+					],
+					"cookie": [],
+					"body": "{\"transaction\":{\"id\":\"jmt1jg5n\",\"status\":\"authorized\",\"type\":\"sale\",\"currencyIsoCode\":\"USD\",\"amount\":\"3.00\",\"merchantAccountId\":\"paypal\",\"subMerchantAccountId\":null,\"masterMerchantAccountId\":null,\"orderId\":\"JUN05_ORDER_001\",\"createdAt\":\"2018-06-05T21:58:46Z\",\"updatedAt\":\"2018-06-05T21:58:52Z\",\"customer\":{\"id\":\"522541569\",\"firstName\":\"Todd\",\"lastName\":\"Fulton\",\"company\":\"PayPal\",\"email\":\"tofulton-buyer@paypal.com\",\"website\":\"www.paypal.com\",\"phone\":\"415.505.5197\",\"fax\":\"415.555.1212\"},\"billing\":{\"id\":null,\"firstName\":null,\"lastName\":null,\"company\":null,\"streetAddress\":null,\"extendedAddress\":null,\"locality\":null,\"region\":null,\"postalCode\":null,\"countryName\":null,\"countryCodeAlpha2\":null,\"countryCodeAlpha3\":null,\"countryCodeNumeric\":null},\"refundId\":null,\"refundIds\":[],\"refundedTransactionId\":null,\"partialSettlementTransactionIds\":[],\"authorizedTransactionId\":null,\"settlementBatchId\":null,\"shipping\":{\"id\":null,\"firstName\":null,\"lastName\":null,\"company\":null,\"streetAddress\":null,\"extendedAddress\":null,\"locality\":null,\"region\":null,\"postalCode\":null,\"countryName\":null,\"countryCodeAlpha2\":null,\"countryCodeAlpha3\":null,\"countryCodeNumeric\":null},\"customFields\":\"\",\"avsErrorResponseCode\":null,\"avsPostalCodeResponseCode\":\"I\",\"avsStreetAddressResponseCode\":\"I\",\"cvvResponseCode\":\"I\",\"gatewayRejectionReason\":null,\"processorAuthorizationCode\":null,\"processorResponseCode\":\"1000\",\"processorResponseText\":\"Approved\",\"additionalProcessorResponse\":null,\"voiceReferralNumber\":null,\"purchaseOrderNumber\":null,\"taxAmount\":null,\"taxExempt\":false,\"creditCard\":{\"token\":\"gnztwc\",\"bin\":null,\"last4\":null,\"cardType\":null,\"expirationMonth\":\"\",\"expirationYear\":\"\",\"customerLocation\":null,\"cardholderName\":null,\"imageUrl\":\"https://assets.braintreegateway.com/payment_method_logo/unknown.png?environment=sandbox\",\"prepaid\":\"Unknown\",\"healthcare\":\"Unknown\",\"debit\":\"Unknown\",\"durbinRegulated\":\"Unknown\",\"commercial\":\"Unknown\",\"payroll\":\"Unknown\",\"issuingBank\":\"Unknown\",\"countryOfIssuance\":\"Unknown\",\"productId\":\"Unknown\",\"uniqueNumberIdentifier\":null,\"venmoSdk\":false,\"maskedNumber\":\"null******null\",\"expirationDate\":\"/\"},\"paypal\":{\"token\":\"gnztwc\",\"payerEmail\":\"tofulton-buyer@paypal.com\",\"paymentId\":\"PAY-38166018CK003411CLMLQOPA\",\"authorizationId\":\"66M45380GR775923U\",\"imageUrl\":\"https://assets.braintreegateway.com/payment_method_logo/paypal.png?environment=sandbox\",\"debugId\":\"cba347231d81\",\"payeeId\":null,\"payeeEmail\":null,\"customField\":null,\"payerId\":\"VTW5PBHNTV24A\",\"payerFirstName\":\"test\",\"payerLastName\":\"buyer\",\"payerStatus\":\"VERIFIED\",\"sellerProtectionStatus\":\"ELIGIBLE\",\"captureId\":null,\"refundId\":null,\"transactionFeeAmount\":null,\"transactionFeeCurrencyIsoCode\":null,\"description\":null},\"statusHistory\":[{\"timestamp\":\"2018-06-05T21:58:52Z\",\"status\":\"authorized\",\"amount\":\"3.00\",\"user\":\"tfulton\",\"transactionSource\":\"api\"}],\"planId\":null,\"subscriptionId\":null,\"subscription\":{\"billingPeriodEndDate\":null,\"billingPeriodStartDate\":null},\"addOns\":[],\"discounts\":[],\"descriptor\":{\"name\":null,\"phone\":null,\"url\":null},\"recurring\":false,\"channel\":null,\"serviceFeeAmount\":null,\"escrowStatus\":null,\"disbursementDetails\":{\"disbursementDate\":null,\"settlementAmount\":null,\"settlementCurrencyIsoCode\":null,\"settlementCurrencyExchangeRate\":null,\"fundsHeld\":null,\"success\":null},\"disputes\":[],\"authorizationAdjustments\":[],\"paymentInstrumentType\":\"paypal_account\",\"processorSettlementResponseCode\":\"\",\"processorSettlementResponseText\":\"\",\"threeDSecureInfo\":null,\"shipsFromPostalCode\":null,\"shippingAmount\":null,\"discountAmount\":null,\"paypalAccount\":{\"token\":\"gnztwc\",\"payerEmail\":\"tofulton-buyer@paypal.com\",\"paymentId\":\"PAY-38166018CK003411CLMLQOPA\",\"authorizationId\":\"66M45380GR775923U\",\"imageUrl\":\"https://assets.braintreegateway.com/payment_method_logo/paypal.png?environment=sandbox\",\"debugId\":\"cba347231d81\",\"payeeId\":null,\"payeeEmail\":null,\"customField\":null,\"payerId\":\"VTW5PBHNTV24A\",\"payerFirstName\":\"test\",\"payerLastName\":\"buyer\",\"payerStatus\":\"VERIFIED\",\"sellerProtectionStatus\":\"ELIGIBLE\",\"captureId\":null,\"refundId\":null,\"transactionFeeAmount\":null,\"transactionFeeCurrencyIsoCode\":null,\"description\":null},\"coinbaseAccount\":{},\"applePayCard\":{},\"androidPayCard\":{},\"visaCheckoutCard\":{},\"masterpassCard\":{}},\"success\":true}"
+				},
+				{
+					"name": "Transaction Sale w/Customer Id - linte items",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": false
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": \"10.00\",\n  \"orderId\": \"JUN22_001\",\n  \"customerId\": \"520806703\",\n  \"options\": {\n    \"submitForSettlement\": false,\n    \"storeInVaultOnSuccess\": false\n  },\n  \"lineItems\": [\n  \t{\n  \t\t\"name\": \"jacket\",\n  \t\t\"commodityCode\": \"code001\",\n  \t\t\"description\": \"Blue jacket\",\n  \t\t\"kind\": \"debit\",\n  \t\t\"quantity\": \"1\",\n  \t\t\"unitAmount\": 10.00,\n  \t\t\"totalAmount\": 10.00\n  \t}\n  \t\n  ]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/checkout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"checkout"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Connection",
+							"value": "keep-alive",
+							"name": "Connection",
+							"description": "Options that are desired for the connection"
+						},
+						{
+							"key": "Content-Length",
+							"value": "4238",
+							"name": "Content-Length",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 22 Jun 2018 13:26:52 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"108e-vJV3OrpsKtImUj4mC69nGy9s7Ls\"",
+							"name": "ETag",
+							"description": "An identifier for a specific version of a resource, often a message digest"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express",
+							"name": "X-Powered-By",
+							"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+						}
+					],
+					"cookie": [],
+					"body": "{\"transaction\":{\"id\":\"1mr6zmhq\",\"status\":\"authorized\",\"type\":\"sale\",\"currencyIsoCode\":\"USD\",\"amount\":\"10.00\",\"merchantAccountId\":\"paypal\",\"subMerchantAccountId\":null,\"masterMerchantAccountId\":null,\"orderId\":\"JUN22_001\",\"createdAt\":\"2018-06-22T13:26:40Z\",\"updatedAt\":\"2018-06-22T13:26:50Z\",\"customer\":{\"id\":\"520806703\",\"firstName\":\"Todd\",\"lastName\":\"Fulton_LINEITEMTEST\",\"company\":\"PayPal\",\"email\":\"tofulton-buyer@paypal.com\",\"website\":\"www.paypal.com\",\"phone\":\"415.505.5197\",\"fax\":\"415.555.1212\"},\"billing\":{\"id\":null,\"firstName\":null,\"lastName\":null,\"company\":null,\"streetAddress\":null,\"extendedAddress\":null,\"locality\":null,\"region\":null,\"postalCode\":null,\"countryName\":null,\"countryCodeAlpha2\":null,\"countryCodeAlpha3\":null,\"countryCodeNumeric\":null},\"refundId\":null,\"refundIds\":[],\"refundedTransactionId\":null,\"partialSettlementTransactionIds\":[],\"authorizedTransactionId\":null,\"settlementBatchId\":null,\"shipping\":{\"id\":null,\"firstName\":null,\"lastName\":null,\"company\":null,\"streetAddress\":null,\"extendedAddress\":null,\"locality\":null,\"region\":null,\"postalCode\":null,\"countryName\":null,\"countryCodeAlpha2\":null,\"countryCodeAlpha3\":null,\"countryCodeNumeric\":null},\"customFields\":\"\",\"avsErrorResponseCode\":null,\"avsPostalCodeResponseCode\":\"I\",\"avsStreetAddressResponseCode\":\"I\",\"cvvResponseCode\":\"I\",\"gatewayRejectionReason\":null,\"processorAuthorizationCode\":null,\"processorResponseCode\":\"1000\",\"processorResponseText\":\"Approved\",\"additionalProcessorResponse\":null,\"voiceReferralNumber\":null,\"purchaseOrderNumber\":null,\"taxAmount\":null,\"taxExempt\":false,\"creditCard\":{\"token\":\"6xzrdn\",\"bin\":null,\"last4\":null,\"cardType\":null,\"expirationMonth\":\"\",\"expirationYear\":\"\",\"customerLocation\":null,\"cardholderName\":null,\"imageUrl\":\"https://assets.braintreegateway.com/payment_method_logo/unknown.png?environment=sandbox\",\"prepaid\":\"Unknown\",\"healthcare\":\"Unknown\",\"debit\":\"Unknown\",\"durbinRegulated\":\"Unknown\",\"commercial\":\"Unknown\",\"payroll\":\"Unknown\",\"issuingBank\":\"Unknown\",\"countryOfIssuance\":\"Unknown\",\"productId\":\"Unknown\",\"uniqueNumberIdentifier\":null,\"venmoSdk\":false,\"maskedNumber\":\"null******null\",\"expirationDate\":\"/\"},\"paypal\":{\"token\":\"6xzrdn\",\"payerEmail\":\"tofulton-buyer@paypal.com\",\"paymentId\":\"PAY-20G89936L06883149LMWPOUY\",\"authorizationId\":\"12126588M0630373U\",\"imageUrl\":\"https://assets.braintreegateway.com/payment_method_logo/paypal.png?environment=sandbox\",\"debugId\":\"a1466d48113a5\",\"payeeId\":null,\"payeeEmail\":null,\"customField\":null,\"payerId\":\"VTW5PBHNTV24A\",\"payerFirstName\":\"test\",\"payerLastName\":\"buyer\",\"payerStatus\":\"VERIFIED\",\"sellerProtectionStatus\":\"ELIGIBLE\",\"captureId\":null,\"refundId\":null,\"transactionFeeAmount\":null,\"transactionFeeCurrencyIsoCode\":null,\"description\":null},\"statusHistory\":[{\"timestamp\":\"2018-06-22T13:26:50Z\",\"status\":\"authorized\",\"amount\":\"10.00\",\"user\":\"tfulton\",\"transactionSource\":\"api\"}],\"planId\":null,\"subscriptionId\":null,\"subscription\":{\"billingPeriodEndDate\":null,\"billingPeriodStartDate\":null},\"addOns\":[],\"discounts\":[],\"descriptor\":{\"name\":null,\"phone\":null,\"url\":null},\"recurring\":false,\"channel\":null,\"serviceFeeAmount\":null,\"escrowStatus\":null,\"disbursementDetails\":{\"disbursementDate\":null,\"settlementAmount\":null,\"settlementCurrencyIsoCode\":null,\"settlementCurrencyExchangeRate\":null,\"fundsHeld\":null,\"success\":null},\"disputes\":[],\"authorizationAdjustments\":[],\"paymentInstrumentType\":\"paypal_account\",\"processorSettlementResponseCode\":\"\",\"processorSettlementResponseText\":\"\",\"threeDSecureInfo\":null,\"shipsFromPostalCode\":null,\"shippingAmount\":null,\"discountAmount\":null,\"paypalAccount\":{\"token\":\"6xzrdn\",\"payerEmail\":\"tofulton-buyer@paypal.com\",\"paymentId\":\"PAY-20G89936L06883149LMWPOUY\",\"authorizationId\":\"12126588M0630373U\",\"imageUrl\":\"https://assets.braintreegateway.com/payment_method_logo/paypal.png?environment=sandbox\",\"debugId\":\"a1466d48113a5\",\"payeeId\":null,\"payeeEmail\":null,\"customField\":null,\"payerId\":\"VTW5PBHNTV24A\",\"payerFirstName\":\"test\",\"payerLastName\":\"buyer\",\"payerStatus\":\"VERIFIED\",\"sellerProtectionStatus\":\"ELIGIBLE\",\"captureId\":null,\"refundId\":null,\"transactionFeeAmount\":null,\"transactionFeeCurrencyIsoCode\":null,\"description\":null},\"coinbaseAccount\":{},\"applePayCard\":{},\"androidPayCard\":{},\"visaCheckoutCard\":{},\"masterpassCard\":{}},\"success\":true}"
+				}
+			]
+		},
+		{
+			"name": "Transaction Sale w/Vaulted Pmt Method",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": \"8.02\",\n  \"orderId\": \"APR13_tfulton_001\",\n  \"paymentMethodToken\": \"hjc7tx\",\n  \"options\": {\n    \"submitForSettlement\": false\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/checkout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"checkout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction Sale",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"paymentMethodNonce\": \"edb6fb5b-f49d-0961-621f-20e2d47ac15b\",\n  \"amount\": \"2000.00\",\n  \"orderId\": \"NOV282018_002\",\n  \"options\": {\n    \"submitForSettlement\": false\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/checkout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"checkout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction Sale w/Store in Vault",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": \"1.00\",\n  \"orderId\": \"JUN08_001\",\n  \"paymentMethodNonce\": \"3e9b3728-8261-0923-6483-d545789c91bd\",\n  \"customer\": {\n    \"firstName\": \"Todd\",\n    \"lastName\": \"Fulton\",\n    \"company\": \"Braintree\",\n    \"phone\": \"312-555-1234\",\n    \"fax\": \"312-555-12346\",\n    \"website\": \"http://www.example.com\",\n    \"email\": \"tofulton-buyer@paypal.com\"\n  },\n  \"shipping\": {\n    \"firstName\": \"Todd\",\n    \"lastName\": \"Fu;lton\",\n    \"company\": \"Braintree\",\n    \"streetAddress\": \"1 E 1st St\",\n    \"extendedAddress\": \"5th Floor\",\n    \"locality\": \"Bartlett\",\n    \"region\": \"IL\",\n    \"postalCode\": \"60103\",\n    \"countryCodeAlpha2\": \"US\"\n  },\n  \"options\": {\n    \"submitForSettlement\": false,\n    \"storeInVaultOnSuccess\": true\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/checkout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"checkout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction Sale w/LOB",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": \"2.00\",\n  \"orderId\": \"JUN19_AEORDER50_PAYEE_001\",\n  \"customerId\": \"274194769\",\n  \"options\": {\n    \"paypal\": {\n      \"payeeEmail\": \"american_eagle_biz@gmail.com\"\n    },\n    \"submitForSettlement\": true\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/checkout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"checkout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction Sale w/FX",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount\": \"10.00\",\n  \"orderId\": \"BR_001\",\n  \"merchantAccountId\": \"LOB-BR\",\n  \"paymentMethodNonce\": \"4eb8c32c-f07f-078c-5fae-bc8a3a3f1883\",\n  \"options\": {\n    \"submitForSettlement\": true\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/checkout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"checkout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Transaction",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/find/2bzq9a53",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"find",
+						"2bzq9a53"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Transaction Search/Token",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/find/token/hgb3pc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"find",
+						"token",
+						"hgb3pc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Capture Auth",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/capture/2bzq9a53",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"capture",
+						"2bzq9a53"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Capture Auth Partial",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 90.00\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/capture/d4dqgz92/partial",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"capture",
+						"d4dqgz92",
+						"partial"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refund",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/refund/07v6kscf",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"refund",
+						"07v6kscf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refund Partial",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"amount\": 7.20\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/refund/7hw261b8/partial",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"refund",
+						"7hw261b8",
+						"partial"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,235 @@
+<html>
+
+<head>
+    <title>Braintree Client SDK Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+    <script src="https://js.braintreegateway.com/web/3.71.1/js/client.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.71.1/js/paypal-checkout.min.js"></script>
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=AYidKuTmO-c-5kUElRNtNin579BxO3G6dzYK9rLuY0AUp01QY67KZTRXWedVDAHYdhE7IvgPuWDtBqfq&currency=USD"
+        data-version-4></script>
+</head>
+
+<body>
+    <!-- BEGIN: MAIN CONTENT -->
+    <div class="ui container" id="mainSection">
+        <p></p>
+        <h3 class="header">Braintree JSv3 - Checkout.js</h3>
+        <div class="ui top attached tabular menu">
+            <a class="item active" data-tab="first" id="stepOne">Begin</a>
+            <a class="item" data-tab="second" id="stepTwo">Review</a>
+        </div>
+
+        <div class="ui bottom attached tab segment active">
+
+            <div class="ui negative message hidden" id="errorMessage">
+                <i class="close icon"></i>
+                <div class="header" id="errorMessageHeader"></div>
+                <p id="errorMessageContent"></p>
+            </div>
+
+            <div class="ui message" id="infoMessage">
+                <div class="header"></div>
+                <p></p>
+            </div>
+
+            <!-- PAYMENT FORM -->
+            <div class="ui container" id="paymentForm">
+                <div id="paypal-button"></div>
+                <p />
+                <div id="paypal-credit-button"></div>
+            </div>
+
+            <!-- RESPONSE PAYLOAD WE CAN PUT HERE -->
+            <div class="ui divider"></div>
+            <div class="title">
+                Response
+            </div>
+            <div class="ui segment" id="responsePayload"></div>
+        </div>
+
+    </div>
+    <!-- END: MAIN CONTENT -->
+    <script>
+
+        //////////////////////////////////////////////////////////////////////
+        // BULK OF OUR INTEGTRATION WORK IS IN THIS SECTION
+        //////////////////////////////////////////////////////////////////////
+
+        braintree.client.create({
+            authorization: "sandbox_bn4dn4nd_d3dk6npsbpz7t3s8",
+            //merchantAccountId: "LOB-USD"
+        }, function (err, clientInstance) {
+            braintree.paypalCheckout.create({
+                client: clientInstance
+            }, function (err, paypalCheckoutInstance) {
+                paypalCheckoutInstance.loadPayPalSDK({
+                    vault: false
+                }, function () {
+                    // Set up regular PayPal button
+                    paypal.Buttons({
+                        fundingSource: paypal.FUNDING.PAYPAL,
+
+                        createOrder: function () {
+                            return paypalCheckoutInstance.createPayment({
+                                flow: 'checkout',
+                                currency: "USD",
+                                amount: 20.00,
+                                enableShippingAddress: true,
+                                shippingAddressEditable: false,
+                                /**
+                                shippingAddressOverride: {
+                                    recipientName: 'Scruff McGruff',
+                                    line1: '1234 Main St.',
+                                    line2: 'Unit 1',
+                                    city: 'Chicago',
+                                    countryCode: 'US',
+                                    //postalCode: '60652',
+                                    postalCode: '94707',
+                                    state: 'IL',
+                                    phone: '123.456.7890'
+                                }
+                                **/
+                            });
+                        },
+                        /**
+                        createBillingAgreement: function () {
+                            return paypalCheckoutInstance.createPayment({
+                                flow: 'vault',
+                                billingAgreementDescription: 'Your agreement description',
+                                enableShippingAddress: true,
+                                shippingAddressEditable: false,
+                                shippingAddressOverride: {
+                                    recipientName: 'Scruff McGruff',
+                                    line1: '1234 Main St.',
+                                    line2: 'Unit 1',
+                                    city: 'Chicago',
+                                    countryCode: 'US',
+                                    postalCode: '60652',
+                                    state: 'IL',
+                                    phone: '123.456.7890'
+                                }
+                            });
+                        },
+                        **/
+                        onApprove: function (data, actions) {
+                            return paypalCheckoutInstance.tokenizePayment(data, function (err, payload) {
+
+                                // hide form and update the tabs
+                                $("#paymentForm").hide();
+                                $("#stepOne").removeClass("active");
+                                $("#stepTwo").addClass("active");
+
+                                // show a confirmation to the user
+                                presentInfoMessage(
+                                    "Great!",
+                                    "Sucessfully created billing agreement token for PayPal."
+                                );
+
+                                $("#responsePayload").html(
+                                    "<pre>" + JSON.stringify(payload, null, 1) + "</pre>"
+                                );
+                            });
+                        },
+                    }).render('#paypal-button');
+
+                    // Set up PayPal Credit button
+                    paypal.Buttons({
+                        fundingSource: paypal.FUNDING.CREDIT,
+
+                        createBillingAgreement: function () {
+                            return paypalCheckoutInstance.createPayment({
+                                flow: 'vault',
+                                billingAgreementDescription: 'Your agreement description',
+                                enableShippingAddress: true,
+                                shippingAddressEditable: false,
+                                shippingAddressOverride: {
+                                    recipientName: 'Scruff McGruff',
+                                    line1: '1234 Main St.',
+                                    line2: 'Unit 1',
+                                    city: 'Chicago',
+                                    countryCode: 'US',
+                                    postalCode: '60652',
+                                    state: 'IL',
+                                    phone: '123.456.7890'
+                                }
+                            });
+                        },
+                        onApprove: function (data, actions) {
+                            return paypalCheckoutInstance.tokenizePayment(data, function (err, payload) {
+
+                                // hide form and update the tabs
+                                $("#paymentForm").hide();
+                                $("#stepOne").removeClass("active");
+                                $("#stepTwo").addClass("active");
+
+                                // show a confirmation to the user
+                                presentInfoMessage(
+                                    "Great!",
+                                    "Sucessfully created billing agreement token for Credit."
+                                );
+
+                                $("#responsePayload").html(
+                                    "<pre>" + JSON.stringify(payload, null, 1) + "</pre>"
+                                );
+                            });
+                        },
+                    }).render('#paypal-credit-button');
+                });
+            });
+        });
+
+
+
+        //////////////////////////////////////////////////////////////////////
+        // MISC PAGE PRESENTATION CODE
+        //////////////////////////////////////////////////////////////////////
+        // 1) set the info message and present the payload for the user to see if they choose
+        presentInfoMessage(
+            "Begin",
+            "Click a button and the JavaScript SDK initiates a payment."
+        );
+
+        //////////////////////////////////////////////////////////////////////
+        // SOME UTILITY FUNCTIONS TO HELP OUR PAGE PRESENTATION
+        //////////////////////////////////////////////////////////////////////
+        function presentPayload(info) {
+            $("#requestType").html(info.type);
+            $("#requestPayload").html(
+                "<pre>" + JSON.stringify(info.request, null, 1) + "</pre>"
+            );
+            $("#responsePayload").html(
+                "<pre>" + JSON.stringify(info.response, null, 1) + "</pre>"
+            );
+            return;
+        }
+
+        function presentError(header = "General Error", error, debug = false) {
+            $("#errorMessageHeader").html(header);
+            $("#errorMessageContent").html(error.message);
+            if (debug) {
+                $("#errorStack").html(error.stack);
+            }
+            $("#errorMessage").show();
+        }
+
+        function presentInfoMessage(header, message) {
+            $("#infoMessage .header").html(header);
+            $("#infoMessage p").html(message);
+        }
+
+        const uuidv4 = function () {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+    </script>
+</body>
+
+</html>
